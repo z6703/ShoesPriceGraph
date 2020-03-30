@@ -11,5 +11,10 @@ def hello_world():
     return render_template("1.html")
 
 
+@app.route('/orders/<int:order_id>')
+def check_order(order_id):
+    return "查询" + order_id
+
+
 if __name__ == '__main__':
-    app.run()
+    app.run(debug=True)
