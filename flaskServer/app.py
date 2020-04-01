@@ -21,29 +21,26 @@ def index_page():
     return render_template("功能验证版主页.html")
 
 
-"""
-使用id搜索对应的图片
-1. 路由需要有get和post两种请求方式 --> 需要判断请求方式
-2. 获取请求的参数
-3. 判断参数是否填写，参数是否有效
-4.返回对应的图片
-"""
-
-
 @app.route('/search_id', methods=['GET', 'POST'])
 def search_id():
-    # request:
+    """
+    使用id搜索对应的图片
+    1. 路由需要有get和post两种请求方式 --> 需要判断请求方式
+    2. 获取请求的参数
+    3. 判断参数是否填写，参数是否有效
+    4.返回对应的图片
+    """
     if request.method == "POST":
-        image_id = int(request.form.get("id"))
-        if 0 < image_id < 20:
-            res = "static/images/" + str(image_id) + ".png"
-            return render_template("图片页.html", show_img=res)
+        image_id = request.form.get("id")
+        if image_id:
+            try:
+                image_id = int(image_id)
+                if 0 < image_id < 20:
+                    res = "static/images/" + str(image_id) + ".png"
+                    return render_template("图片页.html", show_img=res)
+            except:
+                pass
     return render_template("功能验证版主页.html")
-
-@app.route('/back_home', methods=['GET', 'POST'])
-def back_home_page():
-    return render_template("功能验证版主页.html")
-
 
 
 # @app.route('/<int:id>/mainpage', methods=('GET', 'POST'))
