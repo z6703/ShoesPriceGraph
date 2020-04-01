@@ -5,13 +5,13 @@
 @Date   : 2020/3/31 16:05
 @Desc   :
 """
-import os
-from flask import Flask, render_template
 from datetime import timedelta
+
+from flask import Flask, render_template, request
 
 # 创建Flask应用程序实例
 app = Flask(__name__)
-app.config['SEND_FILE_MAX_AGE_DEFAULT'] = timedelta(seconds=1)
+app.config['SEND_FILE_MAX_AGE_DEFAULT'] = timedelta(seconds=360)
 
 
 # Flask中定义路由是通过装饰器实现的
@@ -19,6 +19,31 @@ app.config['SEND_FILE_MAX_AGE_DEFAULT'] = timedelta(seconds=1)
 def index_page():
     # return render_template("index.html")
     return render_template("功能验证版主页.html")
+
+
+"""
+使用id搜索对应的图片
+1. 路由需要有get和post两种请求方式 --> 需要判断请求方式
+2. 获取请求的参数
+3. 判断参数是否填写，参数是否有效
+4.返回对应的图片
+"""
+
+
+@app.route('/search_id', methods=['GET', 'POST'])
+def search_id():
+    # request:
+    if request.method == "POST":
+        image_id = int(request.form.get("id"))
+        if 0 < image_id < 20:
+            res = "static/images/" + str(image_id) + ".png"
+            return render_template("图片页.html", show_img=res)
+    return render_template("功能验证版主页.html")
+
+@app.route('/back_home', methods=['GET', 'POST'])
+def back_home_page():
+    return render_template("功能验证版主页.html")
+
 
 
 # @app.route('/<int:id>/mainpage', methods=('GET', 'POST'))
