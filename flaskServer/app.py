@@ -43,6 +43,22 @@ def search_id():
     return render_template("功能验证版主页.html")
 
 
+@app.route('/search_test', methods=['GET', 'POST'])
+def search_test():
+    """
+    使用名称搜索对应的鞋
+    1. 路由需要有get和post两种请求方式 --> 需要判断请求方式
+    2. 获取请求的参数
+    3. 判断参数是否填写，参数是否有效
+    4. 返回匹配到的搜索结果
+    """
+    if request.method == "POST":
+        image_id = request.form.get("id")
+        return render_template("搜索结果页.html",
+                               search_res=["/static/images/1.png", "/static/images/2.png", "/static/images/3.png",
+                                          "/static/images/4.png", "/static/images/5.png"])
+
+
 # @app.route('/<int:id>/mainpage', methods=('GET', 'POST'))
 # def mainpage(id):
 #     root_dir = os.path.abspath(os.path.dirname(__file__))
@@ -55,4 +71,4 @@ def search_id():
 
 
 if __name__ == '__main__':
-    app.run()
+    app.run(debug=True)
