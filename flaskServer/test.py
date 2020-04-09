@@ -9,5 +9,9 @@ import redis
 # print(r.get("name"))
 pkl_file = open('shoes.pkl', 'rb')
 obj = pickle.load(pkl_file)
+print(obj.id)
+print(obj.name)
 for i in obj.color_info:
-    i.print_info()
+    print(i.color_id)
+    print(i.color_name)
+    print(i.img_link)

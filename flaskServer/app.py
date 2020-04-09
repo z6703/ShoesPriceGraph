@@ -10,14 +10,16 @@ from datetime import timedelta
 from flask import Flask, render_template, request
 from pyecharts import options as opts
 from pyecharts.charts import Line
+
 import controller
 
 # 创建Flask应用程序实例
 app = Flask(__name__)
 app_controller = controller.Controller()
 app.config['SEND_FILE_MAX_AGE_DEFAULT'] = timedelta(seconds=360)
-app.DEBUG=True
+app.DEBUG = True
 app.jinja_env.auto_reload = True
+
 
 # Flask中定义路由是通过装饰器实现的
 @app.route('/')
@@ -68,9 +70,8 @@ def search_shoes():
     """
     if request.method == "POST":
         image_id = request.form.get("id")
-        return render_template("search_result.html",
-                               search_res=["/static/images/1.png", "/static/images/2.png", "/static/images/3.png",
-                                           "/static/images/4.png", "/static/images/5.png"])
+        res = app_controller.search_specific_shoes(image_id)
+        return render_template("search_result.html", search_res=res)
 
 
 # @app.route('/<int:id>/mainpage', methods=('GET', 'POST'))

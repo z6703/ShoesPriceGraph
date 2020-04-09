@@ -69,13 +69,13 @@
     <div class="container" style="text-align: center">
         <div class="row">
             {% for i in search_res %}
-                <div class="col-md-4">
-                    <div class="card mb-4 shadow-sm">
-                        <img src="http://shihuo.hupucdn.com/def/20191111/df083cb67432eb5a5fe92151ab2d5c2a1573456147.jpg"
+                <div class="col-md-3">
+                    <div class="card mb-3 shadow-sm">
+                        <img src="{{ i[1] }}"
                              class="d-block w-100"
                              alt="...">
                         <div class="card-body" style="background-color: whitesmoke">
-                            <p class="card-text">简介或配色名称</p>
+                            <p class="card-text">{{ i[0] }}</p>
                             <div class="justify-content-between align-items-center">
                                 <!-- Button trigger modal -->
                                 <button type="button" class="btn btn-primary" data-toggle="modal"
