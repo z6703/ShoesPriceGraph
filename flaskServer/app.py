@@ -60,14 +60,11 @@ def draw_line_chart(chart_id):
     return l.dump_options_with_quotes()
 
 
-@app.route('/search_test', methods=['GET', 'POST'])
-def search_test():
+@app.route('/search_shoes', methods=['GET', 'POST'])
+def search_shoes():
     """
     使用名称搜索对应的鞋
-    1. 路由需要有get和post两种请求方式 --> 需要判断请求方式
-    2. 获取请求的参数
-    3. 判断参数是否填写，参数是否有效
-    4. 返回匹配到的搜索结果
+    :return: 返回对应的鞋
     """
     if request.method == "POST":
         image_id = request.form.get("id")
