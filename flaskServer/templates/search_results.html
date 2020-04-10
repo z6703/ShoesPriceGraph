@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="en">
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -9,16 +9,15 @@
     <meta name="author" content="">
     <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}">
 
-    <title>图片页</title>
+    <title>搜索结果页</title>
 
     <!-- Bootstrap core CSS -->
     <link rel="stylesheet" href="{{ url_for('static', filename='/css/bootstrap.min.css') }}">
     <!-- Custom styles for this template -->
-    <script type="text/javascript" src="{{ url_for('static', filename="js/jquery-3.4.1.js") }}"></script>
-    <script type="text/javascript" src="https://assets.pyecharts.org/assets/echarts.min.js"></script>
     <style>
         body {
             background: #f8f9fa;
+            font-family: "Microsoft YaHei UI", sans-serif;
         }
     </style>
 </head>
@@ -61,44 +60,40 @@
         </div>
     </div>
 </nav>
-<main role="main" style="margin-top: 8em;">
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-6" style="width: 100%">
-                <img src="{{ show_img }}" alt="" style="width: 100%;height: 100%;">
-            </div>
-            <div class="col-lg-6" style="width: 100%">
-                <div class="jumbotron" style="width: 100%;height: 490px;">
-                    <div id="line_chart" style="width:100%; height:100%;"></div>
-                    <script>
-                        $(
-                            function () {
-                                var chart = echarts.init(document.getElementById('line_chart'), 'white', {renderer: 'canvas'});
-                                $.ajax({
-                                    type: "GET",
-                                    url: "/line_chart/{{ chart_id }}",
-                                    dataType: 'json',
-                                    success: function (result) {
-                                        chart.setOption(result);
-                                        setTimeout(function () {
-                                            window.onresize = function () {
-                                                chart.resize();
-                                            }
-                                        }, 200)
-                                    }
-                                });
-                            }
-                        )
-                    </script>
-                </div>
-            </div>
+<div role="main">
+    <div class="jumbotron" style="margin-top: 60px;text-align: center;">
+        <div class="container">
+            <h1 class="display-3">搜索结果</h1>
         </div>
     </div>
-</main>
-
+    <div class="container">
+        <div class="row">
+            {% for i in search_res %}
+                <div class="col-md-6">
+                    <div class="card mb-3">
+                        <div class="row no-gutters">
+                            <div class="col-sm-4">
+                                <img src="http://shihuo.hupucdn.com/def/20191111/df083cb67432eb5a5fe92151ab2d5c2a1573456147.jpg"
+                                     class="card-img" alt="暂无图片">
+                            </div>
+                            <div class="col-sm-8">
+                                <div class="card-body">
+                                    <h5 class="card-title">{{ i[0] }}</h5>
+                                    <p class="card-text">共搜索到{{ i[2] }}种配色</p>
+                                    <a type="button" class="btn btn-primary" href="/search_colors/{{ i[0] }}">查看所有配色</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
 <!-- Bootstrap core JavaScript
 ================================================== -->
 <!-- Placed at the end of the document so the pages load faster -->
+<script type="text/javascript" src="{{ url_for('static', filename="js/jquery-3.4.1.js") }}"></script>
 <script src="{{ url_for('static', filename="js/popper.min.js") }}"></script>
 <script src="{{ url_for('static', filename="js/bootstrap.min.js") }}"></script>
 <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->

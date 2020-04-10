@@ -8,8 +8,6 @@
 from datetime import timedelta
 
 from flask import Flask, render_template, request
-from pyecharts import options as opts
-from pyecharts.charts import Line
 
 import controller
 
@@ -47,31 +45,42 @@ def search_id():
             try:
                 image_id = int(image_id)
                 if 0 < image_id < 20:
-                    res = "static/images/" + str(image_id) + ".png"
+                    res = "http://shihuo.hupucdn.com/def/20191028/bfb8c375e06ac175b91b004655fe73221572249491.jpg"
 
                     return render_template("img_chart.html", show_img=res, chart_id=image_id)
             except:
                 pass
+    else:
+        return render_template("img_chart.html", show_img="http://shihuo.hupucdn.com/def/20191028/bfb8c375e06ac175b91b004655fe73221572249491.jpg", chart_id=1)
     return render_template("index.html")
 
 
 @app.route('/line_chart/<chart_id>', methods=['GET', 'POST'])
 def draw_line_chart(chart_id):
-    date, price = app_controller.get_chart(shoes_id=1, color_id=1, size=1)
-    l = line_base(date, price)
-    return l.dump_options_with_quotes()
+    line = app_controller.get_chart(shoes_id=1, color_id=1, size=1)
+    return line.dump_options_with_quotes()
 
 
-@app.route('/search_shoes', methods=['GET', 'POST'])
+@app.route('/search_colors/<shoes_id>', methods=['GET'])
+def search_colors(shoes_id):
+    """
+    根据鞋的id搜索所有配色，返回一个二维列表包含配色名称、图片链接
+    :param shoes_id:
+    :return: [[color_name, img_link], [color_name, img_link]]
+    """
+    res = app_controller.search_specific_shoes(shoes_id)
+    return render_template("choose_color.html", search_res=res)
+
+
+@app.route('/search_shoes', methods=['POST'])
 def search_shoes():
     """
     使用名称搜索对应的鞋
     :return: 返回对应的鞋
     """
-    if request.method == "POST":
-        image_id = request.form.get("id")
-        res = app_controller.search_specific_shoes(image_id)
-        return render_template("search_result.html", search_res=res)
+    name = request.form.get("name")
+    res = app_controller.search_shoes(name)
+    return render_template("search_results.html", search_res=res)
 
 
 # @app.route('/<int:id>/mainpage', methods=('GET', 'POST'))
@@ -83,32 +92,6 @@ def search_shoes():
 #         id = 0
 #     file = "/static/images/" + files[id]
 #     return file
-
-def line_base(date: list, price: list) -> Line:
-    line = (
-        Line()
-            .add_xaxis(xaxis_data=date)
-            .add_yaxis(
-            series_name="价格",
-            y_axis=price,
-            markpoint_opts=opts.MarkPointOpts(
-                data=[
-                    opts.MarkPointItem(type_="max", name="最大值"),
-                    opts.MarkPointItem(type_="min", name="最小值"),
-                ]
-            ),
-            markline_opts=opts.MarkLineOpts(
-                data=[opts.MarkLineItem(type_="average", name="平均值")]
-            ),
-        )
-            .set_global_opts(
-            title_opts=opts.TitleOpts(title="历史价格记录"),
-            tooltip_opts=opts.TooltipOpts(trigger="axis"),
-            toolbox_opts=opts.ToolboxOpts(is_show=True),
-            xaxis_opts=opts.AxisOpts(type_="category", boundary_gap=False),
-        )
-    )
-    return line
 
 
 if __name__ == '__main__':
