@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<project version="4">
-  <component name="SshConfigs">
-    <configs>
-      <sshConfig authType="PASSWORD" host="182.92.90.232" id="37f3e6fe-e216-4a29-9c92-cec33679b9a7" port="22" customName="阿里云" nameFormat="CUSTOM" username="root" />
-      <sshConfig authType="PASSWORD" host="182.92.90.232" id="6f9843ba-01b1-4fac-95e9-b161a9ebe371" port="22" customName="阿里云" nameFormat="CUSTOM" username="root" />
-    </configs>
-  </component>
-</project>
