@@ -30,32 +30,19 @@ def index_page():
     return render_template("index.html")
 
 
-@app.route('/search_id', methods=['GET', 'POST'])
-def search_id():
+@app.route('/search_graph', methods=['POST'])
+def search_graph():
     """
     使用id搜索对应的图片
-    1. 路由需要有get和post两种请求方式 --> 需要判断请求方式
-    2. 获取请求的参数
-    3. 判断参数是否填写，参数是否有效
-    4.返回对应的图片和价格折线图
+    返回对应的图片和价格折线图
     """
-    if request.method == "POST":
-        image_id = request.form.get("id")
-        if image_id:
-            try:
-                image_id = int(image_id)
-                if 0 < image_id < 20:
-                    res = "http://shihuo.hupucdn.com/def/20191028/bfb8c375e06ac175b91b004655fe73221572249491.jpg"
-
-                    return render_template("img_chart.html", show_img=res, chart_id=image_id)
-            except:
-                pass
-    else:
-        return render_template("img_chart.html", show_img="http://shihuo.hupucdn.com/def/20191028/bfb8c375e06ac175b91b004655fe73221572249491.jpg", chart_id=1)
-    return render_template("index.html")
+    size = request.form.get("options")
+    print(size)
+    res = "http://shihuo.hupucdn.com/def/20191028/bfb8c375e06ac175b91b004655fe73221572249491.jpg"
+    return render_template("img_chart.html", show_img=res, chart_id=1)
 
 
-@app.route('/line_chart/<chart_id>', methods=['GET', 'POST'])
+@app.route('/line_chart/<chart_id>', methods=['GET'])
 def draw_line_chart(chart_id):
     line = app_controller.get_chart(shoes_id=1, color_id=1, size=1)
     return line.dump_options_with_quotes()

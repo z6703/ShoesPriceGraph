@@ -1,6 +1,6 @@
 import pickle
 import shoes
-
+import controller
 import redis
 
 # r = redis.Redis(host="localhost", port=6379, decode_responses=True)
@@ -15,3 +15,6 @@ for i in obj.color_info:
     print(i.color_id)
     print(i.color_name)
     print(i.img_link)
+
+c = controller.Controller()
+print(c.search_specific_shoes(1))
