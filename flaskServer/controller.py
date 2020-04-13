@@ -13,7 +13,6 @@ from pyecharts.charts import Line
 
 import shoes
 
-
 class Controller:
     def __init__(self):
         pass
@@ -27,9 +26,9 @@ class Controller:
 
     def search_specific_shoes(self, shoes_id: shoes):
         """
-        根据鞋的id搜索所有配色，返回一个三维列表包含配色名称、图片链接和有效的尺寸
+        根据鞋的id搜索所有配色，返回一个三维列表包含配色名称、图片链接
         :param shoes_id:
-        :return: [[color_name, img_link,[36,41,43]], [color_name, img_link, [41,42,43]]]
+        :return: [[color_name, img_link], [color_name, img_link]]
         """
         # pkl_file = open('shoes.pkl', 'rb')
         # obj = pickle.load(pkl_file)
@@ -40,7 +39,21 @@ class Controller:
 
         return res
 
+    def get_valid_size(self, shoes_id, color_id):
+        """
+        根据鞋的id和配色id搜索所有存在记录的尺寸，返回一个列表包含有效的尺寸
+        :param shoes_id, color_id
+        :return: [36, 38, 41, 43]
+        """
+        valid_size = [36, 38, 41, 43]
+        return valid_size
+
     def get_chart(self, shoes_id, color_id, size):
+        """
+        根据鞋的id、配色id、尺寸搜索记录，返回鞋名、配色名、价格、日期、图片链接
+        :param shoes_id, color_id
+        :return: [[shoes_name, color_name, img_link, ["2020/03/30", "2020/03/31", "2020/04/01"], [100, 200, 300]], [shoes_name, color_name, img_link, ["2020/03/30", "2020/03/31", "2020/04/01"], [100, 200, 300]]]
+        """
         date = ["2020/03/30", "2020/03/31", "2020/04/01", "2020/04/02", "2020/04/03", "2020/04/04", "2020/04/05",
                 "2020/04/06", "2020/04/07", "2020/04/08", "2020/04/09", "2020/04/10"]
         price = [100, 200, 300, 500, 200, 300, 100, 200, 300, 500, 200, 300]

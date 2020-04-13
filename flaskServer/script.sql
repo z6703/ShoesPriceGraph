@@ -2,16 +2,16 @@ create table Shoes
 (
     id   int      not null
         primary key,
-    name tinytext not null
-);
+    name varchar(128) not null
+) character set = utf8mb4;
 
 create table ShoesColor
 (
-    color_id   int      not null
+    color_id   int  not null
         primary key,
-    color_name tinytext null,
-    img_link   tinytext null
-);
+    color_name varchar(128) null,
+    img_link   varchar(512) null
+) character set = utf8mb4;
 
 create table ShoesPrice
 (
@@ -27,6 +27,6 @@ create table ShoesPrice
     constraint ShoesPrice_Shoes_id_fk
         foreign key (shoes_id) references Shoes (id)
             on update cascade on delete cascade
-);
+)character set = utf8mb4;
 
 
