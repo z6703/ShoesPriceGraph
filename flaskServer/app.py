@@ -37,7 +37,10 @@ def search_shoes():
     """
     name = request.form.get("name")
     res = app_controller.search_shoes(name)
-    return render_template("search_results.html", search_res=res)
+    if not res:
+        return render_template("index.html")
+    else:
+        return render_template("search_results.html", search_res=res)
 
 
 @app.route('/search_colors/<shoes_id>', methods=['GET'])

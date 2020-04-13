@@ -6,16 +6,19 @@ class Shoes(object):
         self.id = 0
         self.name = ''
         self.color_info = []
+        
 
     def append_color(self, color_info):
         self.color_info.append(color_info)
 
-    def find_color_date(self, c_id, c_date):
-        for i, item in enumerate(self.color_info):
+    def find_color_date(self,c_id,c_date):
+        for i,item in enumerate(self.color_info):
             if item.color_id == c_id:
                 if item.date == c_date:
                     return i
         return -1
+
+
 
 
 class ColorInfo(object):
@@ -23,7 +26,7 @@ class ColorInfo(object):
     # color_name = ''
     # img_link = ''
     # price_dict = dict()
-
+    
     def __init__(self):
         self.color_id = 0
         self.color_name = ''

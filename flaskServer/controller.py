@@ -22,9 +22,11 @@ class Controller:
         实用名称模糊搜索，返回一个二维列表包含匹配到的shoes_id、具体名称、随机配色的一张图片链接和配色总数
         :return:[["shoes_id","shoes_name", "img_link", "quantity"], ["shoes_id","shoes_name", "img_link", "quantity"]]
         """
+        if not name:
+            return
         res = self.op.search_by_name(name)
-        return [[424041, "Nike Kyrie 6", 'http://shihuo.hupucdn.com/def/20191028'
-                                         '/bfb8c375e06ac175b91b004655fe73221572249491.jpg', 28]]
+        print(res)
+        return res
 
     def search_specific_shoes(self, shoes_id: int):
         """
@@ -93,3 +95,6 @@ class Controller:
         while True:
             pass
 
+if __name__ == '__main__':
+    c = Controller()
+    c.search_shoes("nik")

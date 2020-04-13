@@ -100,28 +100,31 @@ class MysqlOperator:
     def search_by_name(self, name):
         sql = "SELECT * FROM Shoes WHERE name like '%" + name + "%' "
         self.sql_excute(sql)
-        result_dict = dict()
+        result_list = [] # id , name, color_num, link
         try:
-            result_dict['shoes_id'], result_dict['shoes_name'] = self.cursor.fetchall()
+            for row in self.cursor.fetchall():
+                result_list.append([row[0],row[1]])
         except:
             return None
 
-        sql = "SELECT DISTINCT shoes_color_id FROM ShoesPrice WHERE shoes_id=%s" % result_dict['shoes_id']
-        self.sql_excute(sql)
-        try:
-            color_ids = self.cursor.fetchall()
-        except:
-            return None
-        result_dict['color_num'] = len(color_ids)
+        for i,item in enumerate(result_list):
+            shoes_id,_=item
+            sql = "SELECT DISTINCT shoes_color_id FROM ShoesPrice WHERE shoes_id=%s" % shoes_id
+            self.sql_excute(sql)
+            try:
+                color_ids = self.cursor.fetchall()
+            except:
+                return None
+            result_list[i].append(len(color_ids))
 
-        sql = "SELECT img_link FROM ShoesColor WHERE color_id=%s" % color_ids[0]
-        self.sql_excute(sql)
-        try:
-            result_dict['img_link'] = self.cursor.fetchone()
-        except:
-            return None
+            sql = "SELECT img_link FROM ShoesColor WHERE color_id=%s" % color_ids[0]
+            self.sql_excute(sql)
+            try:
+                result_list[i].append(self.cursor.fetchone()[0])
+            except:
+                return None
 
-        return result_dict
+        return result_list
 
     def search_color_id(self, shoes_id):
         sql = "SELECT DISTINCT a.color_name,a.img_link,a.color_id \
@@ -198,8 +201,8 @@ if __name__ == "__main__":
     # for item in b.color_info:
     #     item.print_info()
 
-    # b = a.search_by_name('nik')
-    # print(b)
+    b = a.search_by_name('nik')
+    print(b)
     # print("--------------------")
     # b = a.search_color_id(424041)
     # print(b)
@@ -207,7 +210,7 @@ if __name__ == "__main__":
     # b = a.search_size_list(424041, 1362818)
     # print(b)
     # print("--------------------")
-    b = a.search_price_data(424041, 1350886, 43)
-    print(b)
-    print("--------------------")
-    print(b['img_link'], b['price_list'], b['date_list'])
+    # b = a.search_price_data(424041, 1350886, 43)
+    # print(b.keys())
+    # print("--------------------")
+    # print(b['img_link'], b['price_list'], b['date_list'])
