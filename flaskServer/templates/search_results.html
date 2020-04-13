@@ -54,7 +54,7 @@
                         </div>
                     </li>
                 </ul>
-                <form class="form-inline my-2 my-lg-0" action="{{ url_for('search_graph') }}" method="post">
+                <form class="form-inline my-2 my-lg-0" action="{{ url_for('search_shoes') }}" method="post">
                     <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search"
                            name="id">
                     <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
@@ -76,13 +76,13 @@
                     <div class="card mb-3">
                         <div class="row no-gutters">
                             <div class="col-sm-4">
-                                <img src="http://shihuo.hupucdn.com/def/20191111/df083cb67432eb5a5fe92151ab2d5c2a1573456147.jpg"
+                                <img src="{{ i[2] }}"
                                      class="card-img" alt="暂无图片">
                             </div>
                             <div class="col-sm-8">
                                 <div class="card-body">
-                                    <h5 class="card-title">{{ i[0] }}</h5>
-                                    <p class="card-text">共搜索到{{ i[2] }}种配色</p>
+                                    <h5 class="card-title">{{ i[1] }}</h5>
+                                    <p class="card-text">共搜索到{{ i[3] }}种配色</p>
                                     <a type="button" class="btn btn-primary" style="display: block" href="/search_colors/{{ i[0] }}">查看所有配色</a>
                                 </div>
                             </div>

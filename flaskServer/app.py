@@ -26,37 +26,7 @@ def index_page():
     主页
     :return: index.html
     """
-    # return render_template("index.html")
     return render_template("index.html")
-
-
-@app.route('/search_graph', methods=['POST'])
-def search_graph():
-    """
-    使用id搜索对应的图片
-    返回对应的图片和价格折线图
-    """
-    size = request.form.get("options")
-    print(size)
-    res = "http://shihuo.hupucdn.com/def/20191028/bfb8c375e06ac175b91b004655fe73221572249491.jpg"
-    return render_template("img_chart.html", show_img=res, chart_id=1)
-
-
-@app.route('/line_chart/<chart_id>', methods=['GET'])
-def draw_line_chart(chart_id):
-    line = app_controller.get_chart(shoes_id=1, color_id=1, size=1)
-    return line.dump_options_with_quotes()
-
-
-@app.route('/search_colors/<shoes_id>', methods=['GET'])
-def search_colors(shoes_id):
-    """
-    根据鞋的id搜索所有配色，返回一个二维列表包含配色名称、图片链接
-    :param shoes_id:
-    :return: [[color_name, img_link], [color_name, img_link]]
-    """
-    res = app_controller.search_specific_shoes(shoes_id)
-    return render_template("choose_color.html", search_res=res)
 
 
 @app.route('/search_shoes', methods=['POST'])
@@ -70,16 +40,30 @@ def search_shoes():
     return render_template("search_results.html", search_res=res)
 
 
-# @app.route('/<int:id>/mainpage', methods=('GET', 'POST'))
-# def mainpage(id):
-#     root_dir = os.path.abspath(os.path.dirname(__file__))
-#     img_path = root_dir + '\static' + '\images'  # 图片文件存储在static文件夹下的images文件夹内
-#     files = os.listdir(img_path)  # 获取图片文件名字
-#     if id == len(files):
-#         id = 0
-#     file = "/static/images/" + files[id]
-#     return file
+@app.route('/search_colors/<shoes_id>', methods=['GET'])
+def search_colors(shoes_id):
+    """
+    根据鞋的id搜索所有配色，返回一个二维列表包含配色名称、图片链接
+    :param shoes_id:
+    :return: [[color_name, img_link], [color_name, img_link]]
+    """
+    res = app_controller.search_specific_shoes(shoes_id)
+    return render_template("choose_color.html", search_res=res, shoes_id=shoes_id)
+
+
+@app.route('/search_graph/<shoes_id>/<color_id>', methods=['POST'])
+def search_graph(shoes_id, color_id):
+    size = request.form.get("options")
+    show_img = app_controller.get_img(shoes_id, color_id, size)
+    args = [shoes_id, color_id, size]
+    return render_template("img_chart.html", show_img=show_img, args=args)
+
+
+@app.route('/line_chart/<shoes_id>/<color_id>/<size>', methods=['GET'])
+def draw_line_chart(shoes_id, color_id, size):
+    line = app_controller.get_chart(shoes_id, color_id, size)
+    return line.dump_options_with_quotes()
 
 
 if __name__ == '__main__':
-    app.run(host="0.0.0.0", port=5000)
+    app.run()

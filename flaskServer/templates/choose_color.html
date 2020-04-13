@@ -54,7 +54,7 @@
                         </div>
                     </li>
                 </ul>
-                <form class="form-inline my-2 my-lg-0" action="{{ url_for('search_graph') }}" method="post">
+                <form class="form-inline my-2 my-lg-0" action="{{ url_for('search_shoes') }}" method="post">
                     <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search"
                            name="id">
                     <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
@@ -100,14 +100,14 @@
                                             </div>
                                             <form class="form"
                                                   style="display: block"
-                                                  action="{{ url_for('search_graph') }}"
+                                                  action="{{ url_for('search_graph', shoes_id=shoes_id, color_id=i[2])}}"
                                                   method="post">
                                                 <div class="modal-body">
                                                     <div class="btn-group btn-group-toggle" data-toggle="buttons">
                                                         <div class="container-sm">
                                                             <div class="row" style="text-align: center;display: block">
 
-                                                                {% for j in i[2] %}
+                                                                {% for j in i[3] %}
                                                                     <label class="btn btn-secondary" style="margin: 0.5rem">
                                                                         <input type="radio" name="options"
                                                                                value="{{ j }}"> {{ j }}

@@ -18,8 +18,3 @@ import redis
 #
 # c = controller.Controller()
 # print(c.search_specific_shoes(1))
-
-import mysql_operator as mo
-a = mo.MysqlOperator()
-for i in a.search_by_shoes_id(424041).color_info:
-    i.print_info()
