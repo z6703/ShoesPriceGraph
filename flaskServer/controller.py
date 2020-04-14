@@ -25,7 +25,6 @@ class Controller:
         if not name:
             return
         res = self.op.search_by_name(name)
-        print(res)
         return res
 
     def search_specific_shoes(self, shoes_id: int):
@@ -51,7 +50,6 @@ class Controller:
     def get_img(self, shoes_id, color_id, size):
         res = self.op.search_price_data(shoes_id, color_id, size)
         return res['img_link']
-
 
     def get_chart(self, shoes_id, color_id, size):
         """
@@ -91,9 +89,6 @@ class Controller:
         )
         return line
 
-    def run_crawler(self):
-        while True:
-            pass
 
 if __name__ == '__main__':
     c = Controller()

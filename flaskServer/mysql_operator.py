@@ -5,7 +5,7 @@ import pymysql
 
 class MysqlOperator:
     def __init__(self, ip_address='db', uname='root', password='123456', db_name='db_shoes'):
-        self.db_connection = pymysql.Connect(host="182.92.90.232", port=3310, user="root", password="123456",
+        self.db_connection = pymysql.Connect(host="123.56.53.71", port=3310, user="root", password="123456",
                                              charset="utf8", db="db_shoes")
         self.cursor = self.db_connection.cursor()
         self.date = str(datetime.date.today())
@@ -33,6 +33,7 @@ class MysqlOperator:
             self.cursor.execute(sql)
             self.db_connection.commit()
         except:
+            # print('wtf')
             self.db_connection.rollback()
 
     def insert_shoes_data(self, shoes):
@@ -100,15 +101,15 @@ class MysqlOperator:
     def search_by_name(self, name):
         sql = "SELECT * FROM Shoes WHERE name like '%" + name + "%' "
         self.sql_excute(sql)
-        result_list = [] # id , name, color_num, link
+        result_list = []  # id , name, color_num, link
         try:
             for row in self.cursor.fetchall():
-                result_list.append([row[0],row[1]])
+                result_list.append([row[0], row[1]])
         except:
             return None
 
-        for i,item in enumerate(result_list):
-            shoes_id,_=item
+        for i, item in enumerate(result_list):
+            shoes_id, _ = item
             sql = "SELECT DISTINCT shoes_color_id FROM ShoesPrice WHERE shoes_id=%s" % shoes_id
             self.sql_excute(sql)
             try:
