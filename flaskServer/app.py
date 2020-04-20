@@ -7,7 +7,8 @@
 """
 from datetime import timedelta
 
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, redirect
+import re
 
 import controller
 
@@ -17,6 +18,16 @@ app_controller = controller.Controller()
 app.config['SEND_FILE_MAX_AGE_DEFAULT'] = timedelta(seconds=360)
 app.DEBUG = True
 app.jinja_env.auto_reload = True
+
+
+@app.before_request
+def before_request():
+    temp = str(request.path)[1:]
+    if re.match(r"^(search_shoes|line_charts|search_colors|static)", temp) or not temp:
+        return None
+    else:
+        print(str(request.path))
+        return redirect("/")
 
 
 # Flask中定义路由是通过装饰器实现的
