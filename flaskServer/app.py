@@ -5,10 +5,11 @@
 @Date   : 2020/3/31 16:05
 @Desc   :
 """
+import re
+import time
 from datetime import timedelta
 
 from flask import Flask, render_template, request, redirect
-import re
 
 import controller
 
@@ -22,10 +23,26 @@ app.jinja_env.auto_reload = True
 
 @app.before_request
 def before_request():
+    print("\n\nBefore request")
+    print(time.asctime(time.localtime(time.time())))
+    print("source ip: " + str(request.remote_addr))
+    print("request path: " + str(request.path))
+    print("request.method: " + str(request.method))
+    print("---headers--start---")
+    print(str(request.headers).rstrip())
+    print("---headers--end----")
+    print("GET args: " + str(request.args))
+    print("POST args: " + str(request.form) + "\n\n")
+    if request.remote_addr in black_list:
+        return "有非法访问记录，IP已加入黑名单"
+    if str(request.method) != "GET" and str(request.method) != "POST":
+        black_list.append(request.remote_addr)
+        return redirect("/")
     temp = str(request.path)[1:]
-    if re.match(r"^(search_shoes|line_charts|search_colors|static)", temp) or not temp:
+    if re.match(r"^(search_shoes|line_chart|search_colors|search_graph|static)", temp) or not temp:
         return None
     else:
+        black_list.append(request.remote_addr)
         print(str(request.path))
         return redirect("/")
 
@@ -80,4 +97,5 @@ def draw_line_chart(shoes_id, color_id, size):
 
 
 if __name__ == '__main__':
+    black_list = []
     app.run()
