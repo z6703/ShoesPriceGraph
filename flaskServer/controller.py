@@ -30,7 +30,7 @@ class Controller:
     def search_specific_shoes(self, shoes_id: int):
         """
         根据鞋的id搜索所有配色，返回一个三维列表包含配色名称、图片链接
-        :param: shoes_id:
+        :param shoes_id: 鞋的id
         :return: [[color_name, img_link, color_id, [valid_size]], [color_name, img_link, color_id, [valid_size]]]
         """
         res = self.op.search_color_id(shoes_id)
@@ -54,7 +54,7 @@ class Controller:
     def get_chart(self, shoes_id, color_id, size):
         """
         根据鞋的id、配色id、尺寸搜索记录，返回鞋名、配色名、价格、日期、图片链接
-        :param shoes_id, color_id
+        :param: shoes_id, color_id, size
         :return: [[shoes_name, color_name, img_link, ["2020/03/30", "2020/03/31", "2020/04/01"], [100, 200, 300]], [shoes_name, color_name, img_link, ["2020/03/30", "2020/03/31", "2020/04/01"], [100, 200, 300]]]
         """
         res = self.op.search_price_data(shoes_id, color_id, size)
@@ -83,7 +83,7 @@ class Controller:
                 .set_global_opts(
                 title_opts=opts.TitleOpts(title="历史价格记录"),
                 tooltip_opts=opts.TooltipOpts(trigger="axis"),
-                toolbox_opts=opts.ToolboxOpts(is_show=True),
+                toolbox_opts=opts.ToolboxOpts(is_show=False),
                 xaxis_opts=opts.AxisOpts(type_="category", boundary_gap=False),
             )
         )

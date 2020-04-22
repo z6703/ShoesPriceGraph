@@ -28,7 +28,8 @@ class MysqlOperator:
         for sql_item in sql_list:
             self.cursor.execute(sql_item)
 
-    def sql_excute(self, sql):
+    def sql_execute(self, sql):
+        self.db_connection.ping(reconnect=True)
         try:
             self.cursor.execute(sql)
             self.db_connection.commit()
@@ -44,13 +45,13 @@ class MysqlOperator:
         sql = "INSERT INTO Shoes(id, name) \
                 VALUES ('%s', '%s')" % \
               (shoes.id, shoes.name)
-        self.sql_excute(sql)
+        self.sql_execute(sql)
 
         for color in shoes.color_info:
             sql = "INSERT INTO ShoesColor(color_id, color_name, img_link) \
                 VALUES ('%s', '%s', '%s')" % \
                   (color.color_id, color.color_name, color.img_link)
-            self.sql_excute(sql)
+            self.sql_execute(sql)
 
             for size in color.price_dict.keys():
                 if color.price_dict[size] == 0:
@@ -59,7 +60,7 @@ class MysqlOperator:
                 sql = "INSERT INTO ShoesPrice(shoes_id, shoes_color_id, size,update_time,price) \
                     VALUES ('%s', '%s', '%s', '%s', '%s')" % \
                       (shoes.id, color.color_id, self.size_table.index(size), self.date, color.price_dict[size])
-                self.sql_excute(sql)
+                self.sql_execute(sql)
 
     # def search_by_shoes_id(self,shoes_id,color_id=-1,size=-1):
     #     """
@@ -100,7 +101,7 @@ class MysqlOperator:
 
     def search_by_name(self, name):
         sql = "SELECT * FROM Shoes WHERE name like '%" + name + "%' "
-        self.sql_excute(sql)
+        self.sql_execute(sql)
         result_list = []  # id , name, color_num, link
         try:
             for row in self.cursor.fetchall():
@@ -111,7 +112,7 @@ class MysqlOperator:
         for i, item in enumerate(result_list):
             shoes_id, _ = item
             sql = "SELECT DISTINCT shoes_color_id FROM ShoesPrice WHERE shoes_id=%s" % shoes_id
-            self.sql_excute(sql)
+            self.sql_execute(sql)
             try:
                 color_ids = self.cursor.fetchall()
             except:
@@ -119,7 +120,7 @@ class MysqlOperator:
             result_list[i].append(len(color_ids))
 
             sql = "SELECT img_link FROM ShoesColor WHERE color_id=%s" % color_ids[0]
-            self.sql_excute(sql)
+            self.sql_execute(sql)
             try:
                 result_list[i].append(self.cursor.fetchone()[0])
             except:
@@ -132,7 +133,7 @@ class MysqlOperator:
                 FROM ShoesColor a INNER JOIN ShoesPrice b \
                 on a.color_id=b.shoes_color_id \
                 WHERE shoes_id=%s" % shoes_id
-        self.sql_excute(sql)
+        self.sql_execute(sql)
 
         result = []
         try:
@@ -146,7 +147,7 @@ class MysqlOperator:
 
     def search_size_list(self, shoes_id, color_id):
         sql = "SELECT DISTINCT size FROM ShoesPrice WHERE shoes_id=%s and shoes_color_id=%s " % (shoes_id, color_id)
-        self.sql_excute(sql)
+        self.sql_execute(sql)
         size_list = []
         try:
             for row in self.cursor.fetchall():
@@ -157,7 +158,7 @@ class MysqlOperator:
 
     def search_price_data(self, shoes_id, color_id, size):
         sql = "SELECT  name FROM Shoes WHERE id=%s" % (shoes_id)
-        self.sql_excute(sql)
+        self.sql_execute(sql)
         result_dict = dict()
         try:
             result_dict['shoes_name'] = self.cursor.fetchone()
@@ -165,7 +166,7 @@ class MysqlOperator:
             return None
 
         sql = "SELECT color_name,img_link FROM ShoesColor WHERE color_id=%s" % (color_id)
-        self.sql_excute(sql)
+        self.sql_execute(sql)
         try:
             result_dict['color_name'], result_dict['img_link'] = self.cursor.fetchone()
         except:
@@ -175,7 +176,7 @@ class MysqlOperator:
                 FROM ShoesPrice \
                 WHERE shoes_id=%s and shoes_color_id=%s and size=%s " % (
             shoes_id, color_id, self.size_table.index(str(size)))
-        self.sql_excute(sql)
+        self.sql_execute(sql)
         price_list, date_list = [], []
         try:
             for row in self.cursor.fetchall():
