@@ -10,7 +10,7 @@ import re
 from datetime import timedelta
 from logging.handlers import RotatingFileHandler
 
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, redirect
 
 import controller
 
@@ -56,7 +56,7 @@ def before_request():
         return None
     else:
         black_list.add(request.remote_addr)
-        logging.critical("illegal request path, args = " + str(request.method))
+        logging.critical("illegal request path, args = " + str(request.path))
         logging.critical("current black list " + str(black_list))
         return "有非法访问记录，IP已加入黑名单"
 
@@ -78,12 +78,14 @@ def search_shoes():
     :return: 返回对应的鞋
     """
     name = request.form.get("name")
+    res = []
     try:
         res = app_controller.search_shoes(name)
     except Exception as e:
-        res = []
         logging.error("error occurred while searching shoes, args = " + name)
         logging.exception(e)
+    if not res:
+        return redirect("/")
     return render_template("search_results.html", search_res=res)
 
 
@@ -94,12 +96,14 @@ def search_colors(shoes_id):
     :param shoes_id: 鞋的id
     :return: [[color_name, img_link], [color_name, img_link]]
     """
+    res = []
     try:
         res = app_controller.search_specific_shoes(shoes_id)
     except Exception as e:
-        res = []
         logging.error("error occurred while searching colors, args = " + shoes_id)
         logging.exception(e)
+    if not res:
+        return redirect("/")
     return render_template("choose_color.html", search_res=res, shoes_id=shoes_id)
 
 
