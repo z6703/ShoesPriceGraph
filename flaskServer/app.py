@@ -18,10 +18,10 @@ import controller
 app = Flask(__name__)
 app_controller = controller.Controller()
 app.config['SEND_FILE_MAX_AGE_DEFAULT'] = timedelta(seconds=360)
-# 日志等级
+# 日志记录等级
 logging.basicConfig(level=logging.DEBUG)
 # 创建日志记录器，指明日志保存路径,每个日志的大小，保存日志的上限
-file_log_handler = RotatingFileHandler("flask.log", maxBytes=1024000, backupCount=10)
+file_log_handler = RotatingFileHandler("logs/flask.log", maxBytes=1024000, backupCount=10)
 # 设置日志的格式   日志等级    文件名    函数名   行数   日志信息
 formatter = logging.Formatter('%(levelname)s File = %(filename)s Function = %(funcName)s Line = %(lineno)d %(message)s')
 # 将日志记录器指定日志的格式
