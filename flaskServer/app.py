@@ -10,13 +10,19 @@ import re
 from datetime import timedelta
 from logging.handlers import RotatingFileHandler
 
+import redis
 from flask import Flask, render_template, request, redirect
 
 import controller
 
 # 创建Flask应用程序实例
 app = Flask(__name__)
+# 创建控制器实例
 app_controller = controller.Controller()
+# 创建redis连接
+r = redis.Redis(host="localhost", port=6379, decode_responses=True)
+
+# 设置日志
 app.config['SEND_FILE_MAX_AGE_DEFAULT'] = timedelta(seconds=360)
 # 日志记录等级
 logging.basicConfig(level=logging.DEBUG)
@@ -28,36 +34,22 @@ formatter = logging.Formatter('%(levelname)s File = %(filename)s Function = %(fu
 file_log_handler.setFormatter(formatter)
 # 为全局的日志工具对象添加日志记录器
 logging.getLogger().addHandler(file_log_handler)
-black_list = set()
 
 
 @app.before_request
 def before_request():
-    # print("\n\nBefore request")
-    # print(time.asctime(time.localtime(time.time())))
-    # print("source ip: " + str(request.remote_addr))
-    # print("request path: " + str(request.path))
-    # print("request.method: " + str(request.method))
-    # print("---headers--start---")
-    # print(str(request.headers).rstrip())
-    # print("---headers--end----")
-    # print("GET args: " + str(request.args))
-    # print("POST args: " + str(request.form) + "\n\n")
-    if request.remote_addr in black_list:
-        print("current black list: ", black_list)
+    if r.sismember("blacklist", request.remote_addr):
         return "有非法访问记录，IP已加入黑名单"
     if not (str(request.method) == "GET" or str(request.method) == "POST"):
-        black_list.add(request.remote_addr)
-        logging.critical("illegal request method, args = " + str(request.method))
-        logging.critical("current black list " + str(black_list))
+        r.sadd("blacklist", request.remote_addr)
+        logging.critical("[{0}] illegal request method, args = {1}".format(request.remote_addr, str(request.method)))
         return "有非法访问记录，IP已加入黑名单"
     temp = str(request.path)[1:]
     if re.match(r"^(search_shoes|line_chart|search_colors|search_graph|static)", temp) or not temp:
         return None
     else:
-        black_list.add(request.remote_addr)
-        logging.critical("illegal request path, args = " + str(request.path))
-        logging.critical("current black list " + str(black_list))
+        r.sadd("blacklist", request.remote_addr)
+        logging.critical("[{0}] illegal request path, args = {1}".format(request.remote_addr, str(request.path)))
         return "有非法访问记录，IP已加入黑名单"
 
 

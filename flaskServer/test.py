@@ -1,7 +1,9 @@
-# r = redis.Redis(host="localhost", port=6379, decode_responses=True)
-# r.set("name", "A")
-# print(r["name"])
-# print(r.get("name"))
+import redis
+
+r = redis.Redis(host="172.18.0.2", port=6379, decode_responses=True)
+
+print(r.smembers("blacklist"))
+
 # pkl_file = open('shoes.pkl', 'rb')
 # obj = pickle.load(pkl_file)
 # print(obj.id)
