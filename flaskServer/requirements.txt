@@ -1,6 +1,6 @@
 pyecharts==1.7.1
 redis==3.4.1
 requests==2.22.0
-Flask==1.1.2
+Flask==2.3.2
 beautifulsoup4==4.9.0
 pymysql==0.9.3
